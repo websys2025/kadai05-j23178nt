@@ -14,7 +14,22 @@
     <script>
         async function some_api(myForm) {
             // ここにコードを書く
-            document.getElementById("result").innerHTML += myForm.form_data.value+"<br />";
+            const breed = myForm.form_data.value.trim().toLowerCase();
+            const url = `https://dog.ceo/api/breed/${breed}/images/random`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    document.getElementById("result").innerHTML = `<img src="${data.message}" alt="Dog Image" width="300">`;
+                } else {
+                    document.getElementById("result").innerHTML = `犬種「${breed}」が見つかりませんでした。`;
+                }
+            } catch (error) {
+                document.getElementById("result").innerHTML = "エラーが発生しました：" + error;
+            }
+
             document.apiform.reset();
         }
     </script>
